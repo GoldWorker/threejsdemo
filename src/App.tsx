@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import ThreeTool from "./ThreeTool";
+import * as THREE from "three";
 
-function App() {
+export default function App() {
+  useEffect(() => {
+    const threetool = new ThreeTool({
+      canvas: document.getElementById("canvasFrame") as HTMLCanvasElement,
+      container: document.getElementById("canvasWrap") as HTMLElement,
+      mode: "dev",
+    });
+
+    const geometry = new THREE.BoxGeometry(100, 100, 100);
+    const material = new THREE.MeshPhongMaterial({ color: 0x33bb77 });
+    const cube = new THREE.Mesh(geometry, material);
+
+    threetool.scene.add(cube);
+
+    threetool.continuousRender((time) => {
+      cube.rotation.x = time;
+    });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="canvasWrap">
+      <canvas id="canvasFrame" />
     </div>
   );
 }
-
-export default App;
